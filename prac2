@@ -1,0 +1,105 @@
+A.N-Queen Problem
+
+def print_board(board):
+    for row in board:
+        print(" ".join(row))
+    print()
+
+
+def check_q(board, row, col, n):
+    for i in range(row):
+        if board[i][col] == 'Q':
+            return False
+
+    i, j = row, col
+    while i >= 0 and j >= 0:
+        if board[i][j] == 'Q':
+            return False
+        i -= 1
+        j -= 1
+
+    i, j = row, col
+    while i >= 0 and j < n:
+        if board[i][j] == 'Q':
+            return False
+        i -= 1
+        j += 1
+
+    return True
+
+
+def solve_queens(board, row, n):
+    if row == n:
+        print_board(board)
+        return True
+
+    for col in range(n):
+        if check_q(board, row, col, n):
+            board[row][col] = 'Q'
+
+            if solve_queens(board, row + 1, n):
+                return True
+
+            board[row][col] = '.'
+
+    return False
+
+
+def queens():
+    n = int(input("Enter value of N: "))
+    board = []
+
+    for i in range(n):
+        row = []
+        for j in range(n):
+            row.append('.')
+        board.append(row)
+
+    if not solve_queens(board, 0, n):
+        print("No solution found")
+
+
+queens()
+
+B.Tower Of Hanoi
+
+A = [3, 2, 1]
+B = []
+C = []
+
+def display():
+    print("\nA:", A)
+    print("B:", B)
+    print("C:", C)
+
+
+rods = {'A': A, 'B': B, 'C': C}
+moves = 0
+
+while C != [3, 2, 1]:
+    display()
+
+    source = input("\nMove from (A/B/C): ").upper()
+    destination = input("Move to (A/B/C): ").upper()
+
+    if source not in rods or destination not in rods:
+        print("Invalid rod! Choose A, B, or C")
+        continue
+
+    if not rods[source]:
+        print("Source rod is empty!")
+        continue
+
+    if rods[destination] and rods[destination][-1] < rods[source][-1]:
+        print("Invalid Move! Larger disk cannot be placed on a smaller disk.")
+        continue
+
+    disk = rods[source].pop()
+    rods[destination].append(disk)
+    moves += 1
+
+display()
+
+print("\nCongratulations! You solved the Tower of Hanoi!!!")
+print("Total moves:", moves)
+
